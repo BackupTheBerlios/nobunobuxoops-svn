@@ -295,12 +295,12 @@ function plugin_weblog_viewer_convert()
 		if (!is_freeze($page,FALSE)) {
 			$_page = preg_replace("/(.*\/)?([0-9\-]+)$/","\\2",strip_bracket($vars['page']));
 			$edit_tag = "<a href=\"$script?plugin=weblog&mode=edit&conf=$conf_name&page_name=$_page\">";
-			$edit_tag .= "<img src=\"image/paraedit.png\" alt=\"Edit\" title=\"Edit\" /></a>";
+			$edit_tag .= "<img src=\"image/edit.png\" alt=\"Edit\" title=\"Edit\" /></a>";
 			$weblog_content = preg_replace("/\[__EDIT\]/",$edit_tag,$weblog_content);
 		} else {
 			$weblog_content = preg_replace("/\[__EDIT\]/","",$weblog_content);
 		}
-		$body = "<div class=\"style_weblog_body\">".$weblog_content."</div>";
+		$body = "<div class=\"style_calendar_body\">".$weblog_content."</div>";
 
 		if (ereg("([0-9]{4})-([0-9]{2})-([0-9]{2})-([0-9]{3})",$page,$match)) {
 			$date0 = mktime(0,0,0,$match[2],$match[3],$match[1]);
@@ -312,7 +312,7 @@ function plugin_weblog_viewer_convert()
 			if (ereg("(.*[0-9]{4}-[0-9]{2}-[0-9]{2})",strip_bracket($page),$match)) {
 				$day_page= ":Weblog/Daily/".$match[1];
 			}
-		    $head = "<div class = \"style_weblog_date\">".make_pagelink($day_page,$date_str)."</div>\n";
+		    $head = "<div class = \"style_calendar_date\">".make_pagelink($day_page,$date_str)."</div>\n";
 		} else {
 			$head = "";
 		}
