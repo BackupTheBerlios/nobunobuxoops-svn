@@ -1,4 +1,5 @@
 <?php
+// PukiWiki - Yet another WikiWikiWeb clone.
 // $id$
 function weblog_msg_init() {
 	if (LANG=='ja') {
@@ -30,13 +31,18 @@ function weblog_msg_init() {
 			'message_sent' => '投稿記事の保存中です。',
 			'message_sent_complete' => '投稿記事の保存中が完了しました。',
 			'message_ping' => 'TrackBack Pingを送信中です。',
+			'message_disable_comment' => 'コメントの投稿は許可されてません。',
 			'err_msg_nomsg' => '記事が空です。',
 			'err_msg_noauth' => '記事を投稿する権限がありません。',
 			'err_msg_notemplate' => 'テンプレートが見つかりません。(%s)',
 			'err_msg_noconf' => 'コンフィグファイルが見つかりません。(%s)',
 			'err_msg_arg2' => '第二引数が変です。',
 			'err_msg_noargs' => '引数を指定してください。',
-		));
+			'err_nopages' => '<p>\'$1\' には、下位層のページがありません。</p>',
+			'msg_title' => '\'$1\'で始まるページの一覧',
+			'msg_go' => '<span class="small">...</span>',
+			'msg_daily' => '%s%sの投稿(%d件)',
+));
 	} else {
 		$messages = array('_weblog_msgs' => array(
 			'lbl_author' => 'Name:',
@@ -69,6 +75,9 @@ function weblog_msg_init() {
 			'err_msg_noauth' => 'You can\'t post article.',
 			'err_msg_arg2' => '2nd parameter isn\'t valid.',
 			'err_msg_noargs' => 'Please specify parameters.',
+			'err_nopages' => '<p>\'$1\' has no child page.</p>',
+			'msg_title' => 'Page Listing begining from \'$1\'',
+			'msg_go' => '<span class="small">...</span>',
 		));
 	}
 	set_plugin_messages($messages);
@@ -111,6 +120,18 @@ function weblog_load_template($conf_name,$template) {
 	}
 	return $retstr;
 }
+
+function weblog_assign_value($string,$values) {
+	foreach ($values as $key=>$value) {
+		if (is_array($value)) {
+			$string = preg_replace("/\[".$key.":".$value[0]."\]/",$value[1],$string);
+		} else {
+			$string = preg_replace("/\[".$key."\]/",$value,$string);
+		}
+	}
+	return $string;
+}
+//IEのjavascriptでUCS2にencodeされた２バイト文字列のEUC-JPへの変換
 function weblog_conv_knj_escape($str)
 {
 	return mb_convert_encoding(preg_replace_callback(
