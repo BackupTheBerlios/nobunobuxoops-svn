@@ -1,4 +1,5 @@
 <?php
+// PukiWiki - Yet another WikiWikiWeb clone.
 // $id$
 function plugin_weblog_field_inline() {
 	global $script,$vars,$wiki_user_dir;
@@ -15,7 +16,6 @@ function plugin_weblog_field_inline() {
 			$body = preg_replace("/^<p>(.*)<\/p>$/ms","\\1",$body);
 			break;
 		case "__TIMESTAMP" :
-//			$body = mktime(10,09,21,2,15,2004);
 			$body = date("Y年m月d日 H時i分s秒",$body);
 			break;
 		case "__CATEGORY" :
@@ -31,12 +31,11 @@ function plugin_weblog_field_inline() {
 			if (!is_freeze($page,FALSE)) {
 				$_page = preg_replace("/(.*\/)?([0-9\-]+)$/","\\2",strip_bracket($vars['page']));
 				$body = "<a href=\"$script?plugin=weblog&mode=edit&conf={$prms[1]}&page_name=$_page\">";
-				$body .= "<img src=\"image/paraedit.png\" alt=\"Edit\" title=\"Edit\" /></a>";
+				$body .= "<img src=\"image/edit.png\" alt=\"Edit\" title=\"Edit\" /></a>";
 			}
 			break;
 		default :
 	}
-//	return convert_html($body);
 	return $body;
 }
 
