@@ -184,7 +184,7 @@ EOD;
 	}
 	echo <<<EOD
   xml:lang="ja">
-  <channel rdf:about="$script?plugin=rss10&amp;page=$r_page&amp;content=$with_content&amp;count=$list_count">
+  <channel rdf:about="$script?plugin=weblog_rss&amp;config=$conf_name&amp;content=$with_content&amp;count=$list_count">
   <title>$page_title_utf8.$page_add_utf8</title>
   <link>$linkpage_url</link>
   <description>PukiWiki Weblog RecentChanges</description>

@@ -244,7 +244,7 @@ function plugin_weblog_action_save()
 	$retmsg = "";
 	if (file_exists(CACHE_DIR.encode(strip_bracket($page)).".tbf")) {
 		$r_page = rawurlencode(strip_bracket($page));
-		$retmsg = $_weblog_msgs['message_ping']."<img style=\"float:left\" src=\"".XOOPS_URL."/modules/pukiwiki/ping.php?$r_page\" width=1 height=1/> </br>";
+		$retmsg = $_weblog_msgs['message_ping']."<img style=\"float:left\" src=\"".XOOPS_URL."/modules/pukiwiki/weblog_ping.php?$r_page\" width=1 height=1/> </br>";
 	}
 	if ($vars['popup'] != "true") {
 		//正常終了のメッセージ出力
