@@ -1,8 +1,12 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id$
-/////////////////////////////////////////////////
+/*
+ * PukiWiki weblog_rss¥×¥é¥°¥¤¥ó
+ *
+ *$Id$
+ *
+ */
 
+///////////////////////////////////////////////////////////
 require_once 'weblog_common.inc.php';
 
 function plugin_weblog_rss_inline()
@@ -195,4 +199,10 @@ EOD;
 EOD;
 	exit;
 }
+/*
+ * $Log$
+ * Revision 1.2  2004/02/25 08:37:14  nobu
+ * CVS—pƒL[ƒ[ƒh’Ç‰Ái$Id‹y‚Ñ$Log)
+ *
+ */
 ?>

@@ -1,12 +1,13 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $Id$
 /*
-Last-Update:2002-10-29 rev.8
-
-*プラグイン weblog_viewer
-芹布のペ〖ジの斧叫し(*,**,***)の办枉を山绩する
-
+ * PukiWiki weblog_viewerプラグイン
+ *
+ * $Id$
+ *
+ */
+/**
+*车妥
+回年されたweblogのタイトル办枉などを山绩する。
 *Usage
  #weblog_viewer(config,mode,[パラメ〖タ])
  
@@ -36,6 +37,7 @@ Last-Update:2002-10-29 rev.8
 -noney
  Newマ〖クを烧けない。
 */
+///////////////////////////////////////////////////////////
 
 require_once "weblog_common.inc.php";
 
@@ -493,4 +495,10 @@ function weblog_viewer_check_arg($val, $key, &$params)
 	}
 	$params['_args'][] = $val;
 }
+/*
+ * $Log$
+ * Revision 1.3  2004/02/25 08:37:14  nobu
+ * CVS梡僉乕儚乕僪捛壛乮$Id媦傃$Log)
+ *
+ */
 ?>

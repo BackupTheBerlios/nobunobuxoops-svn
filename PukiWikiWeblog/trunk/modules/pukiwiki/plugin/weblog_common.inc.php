@@ -1,6 +1,12 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $id$
+/*
+ * PukiWiki weblog¥×¥é¥°¥¤¥óÍÑ¶¦ÄÌ´Ø¿ô
+ *
+ * $Id$
+ *
+ */
+///////////////////////////////////////////////////////////
+
 function weblog_msg_init() {
 	if (LANG=='ja') {
 		$messages = array('_weblog_msgs' => array(
@@ -141,4 +147,10 @@ function weblog_conv_knj_escape($str)
 function _weblog_conv_escape($matches){
 	return mb_convert_encoding(rawurldecode("%".$matches[1]."%".$matches[2]),"EUC-JP","UCS-2");
 }
+/*
+ * $Log$
+ * Revision 1.4  2004/02/25 08:37:14  nobu
+ * CVS—pƒL[ƒ[ƒh’Ç‰Ái$Id‹y‚Ñ$Log)
+ *
+ */
 ?>

@@ -2,13 +2,13 @@
 /*
  * PukiWiki weblog_viewer¥×¥é¥°¥¤¥ó
  *
- *
  *$Id$
-  calendar_viewer¥×¥é¥°¥¤¥ó¤ò¸µ¤ËºîÀ®
+ *
  */
 /**
  *³µÍ×
   weblog¥×¥é¥°¥¤¥ó¤ÇºîÀ®¤·¤¿¥Ú¡¼¥¸¤ò°ìÍ÷É½¼¨¤¹¤ë¤¿¤á¤Î¥×¥é¥°¥¤¥ó¤Ç¤¹¡£
+  -  calendar_viewer¥×¥é¥°¥¤¥ó¤ò¸µ¤ËºîÀ®
  *¹¹¿·ÍúÎò
  *»È¤¤Êý
   /// #weblog_viewer(pagename,(yyyy-mm|n|this),[mode])
@@ -31,6 +31,7 @@
   --²áµî¤«¤éÌ¤Íè¤Ø¤Î°ìÍ÷É½¼¨¥â¡¼¥É¡£É½¼¨ÍÞ»ß¤¹¤ë¥Ú¡¼¥¸¤Ï¤¢¤ê¤Þ¤»¤ó¡£
 
  */
+///////////////////////////////////////////////////////////
 
 require_once "weblog_common.inc.php";
 
@@ -420,4 +421,10 @@ function plugin_weblog_viewer_check_args()
 	}
 	return $params;
 }
+/*
+ * $Log$
+ * Revision 1.4  2004/02/25 08:37:14  nobu
+ * CVS—pƒL[ƒ[ƒh’Ç‰Ái$Id‹y‚Ñ$Log)
+ *
+ */
 ?>

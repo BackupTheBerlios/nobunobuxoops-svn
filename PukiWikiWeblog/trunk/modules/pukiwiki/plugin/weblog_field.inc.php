@@ -1,6 +1,15 @@
 <?php
-// PukiWiki - Yet another WikiWikiWeb clone.
-// $id$
+/*
+ * PukiWiki weblog_fieldプラグイン
+ *
+ * $Id$
+ *
+ * CopyRight 2004 nobunobu (nobunobu at www.kowa.org)
+ * http://www.kowa.org/
+ *
+ */
+///////////////////////////////////////////////////////////
+
 function plugin_weblog_field_inline() {
 	global $script,$vars,$wiki_user_dir;
 	$prmcnt = func_num_args();
@@ -48,4 +57,10 @@ function plugin_weblog_field_convert() {
 	$prms = func_get_args();
 	return "";
 }
+/*
+ * $Log$
+ * Revision 1.3  2004/02/25 08:37:14  nobu
+ * CVS用キーワード追加（$Id及び$Log)
+ *
+ */
 ?>

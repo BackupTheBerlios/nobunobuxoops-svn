@@ -1,24 +1,24 @@
 <?php
- /*
- 
- PukiWiki WebLog Plugin
-
- CopyRight 2004 nobunobu (nobunobu at www.kowa.org)
- http://www.kowa.org/
-
-Original
- CopyRight 2003 Chung-Yen Chang (candyz at kandix.idv.tw)
- http://pukiwiki.kandix.idv.tw/
- 
- $Id$
- 
-Usage:
-	#weblog
+/*
+ * PukiWiki weblog¥×¥é¥°¥¤¥ó
+ *
+ * $Id$
+ *
+ * CopyRight 2004 nobunobu (nobunobu at www.kowa.org)
+ * http://www.kowa.org/
+ *
+ *Original
+ * CopyRight 2003 Chung-Yen Chang (candyz at kandix.idv.tw)
+ * http://pukiwiki.kandix.idv.tw/
+ *
+ */
+/**
+ *Usage:
+ 	#weblog
 	#weblog(param1)
 		param1 = config
-
 */
-/////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 require_once "weblog_common.inc.php";
 
@@ -492,5 +492,10 @@ function plugin_weblog_category_maketag($prefix,$category)
 	}
 	return "&weblog_field(__CATEGORY,$prefix){{$category}};".$ret;
 }
-
+/*
+ * $Log$
+ * Revision 1.5  2004/02/25 08:37:14  nobu
+ * CVS—pƒL[ƒ[ƒh’Ç‰Ái$Id‹y‚Ñ$Log)
+ *
+ */
 ?>
