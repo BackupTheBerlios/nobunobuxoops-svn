@@ -1,0 +1,10 @@
+#freeze	uid:1	aid:0	gid:0
+// author:1
+RIGHT:Åê¹Æ¼Ô:[__AUTHOR] Åê¹ÆÆü:[__TIMESTAMP][__EDIT]
+**[__SUBJECT]
+RIGHT:[__CATEGORY]
+[__BODY]
+
+----
+****¥³¥á¥ó¥È
+[__COMMENT]

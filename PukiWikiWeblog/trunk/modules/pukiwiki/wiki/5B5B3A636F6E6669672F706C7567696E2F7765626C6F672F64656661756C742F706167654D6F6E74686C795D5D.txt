@@ -1,0 +1,13 @@
+#freeze	uid:1	aid:0	gid:0
+// author:1
+****[__MONTHNAME]
+|TLEFT:100% LEFT:75% TC:0 SC:0 |LEFT:25% SC:0|c
+|->
+#weblog_list([__CONF],MonthlyList,month:[__MONTH],nonew)->
+|->
+RIGHT:[[__BASELINK]]->
+****カレンダ->
+#weblog_list([__CONF],DailyCalendar,month:[__MONTH],count,nonew)->
+****月別->
+#weblog_list([__CONF],MonthlyIndex,count,nonew)->
+|

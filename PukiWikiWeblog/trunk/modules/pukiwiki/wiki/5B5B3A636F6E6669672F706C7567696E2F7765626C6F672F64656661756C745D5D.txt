@@ -1,0 +1,48 @@
+#freeze	uid:2	aid:0	gid:0
+// author:2
+*Weblogプラグイン用デフォルト設定
+*Config
+|TCENTER:90% LEFT:30%|LEFT:25%|LEFT:45%|c
+|Key|Value|Comment|h
+|NAME|weblog|ウェブログ名称|
+|PREFIX|[[weblog]]|ウェブログ格納場所|
+|AUTHOR_COLS|16|名前フィールドの桁数|
+|CATEGORY_COLS|12|カテゴリーフィールドの桁数|
+|SUBJECT_COLS|60|タイトルフィールドの桁数|
+|BODY_COLS|80|メッセージフィールドの桁数|
+|BODY_ROWS|10|メッセージフィールドの行数|
+|DEFAULT_CATEGORY|General|カテゴリーのデフォルト表示|
+|ARTICL_AUTO_BR|1|自動改行オプションのデフォルト|
+|ALLOW_COMMENT|1|コメント許可オプションのデフォルト|
+|UPDATE_STAMP|0|編集時にタイムスタンプを変更するオプションのデフォルト|
+|SHOW_PING_FIELD|0|TrackBack Ping用のフィールド表示|
+|CATEGORY_PREFIX|[[:Category]]|カテゴリーの格納場所|
+|COMMENT_PREFIX|[[:Comment/%s]]|コメントの格納場所|
+|MONTHLY_PREFIX|[[:Weblog/Monthly/%s]]|月別過去ログリストの格納場所|
+|DAILY_PREFIX|[[:Weblog/Daily/%s]]|月別過去ログリストの格納場所|
+
+*他の設定ファイル
+**[[作成するページのテンプレート>:config/plugin/weblog/default/page]]
+RIGHT:[ [[ソース>http://www.kowa.org/modules/pukiwiki/index.php?plugin=source&page=%5B%5B%3Aconfig%2Fplugin%2Fweblog%2Fdefault%2Fpage%5D%5D]] ]
+|TCENTER:90% LEFT:100%|c
+|->
+#include(:config/plugin/weblog/default/page,notitle)->
+|
+**[[作成する月別一覧ページのテンプレート>:config/plugin/weblog/default/pageMonthly]]
+RIGHT:[ [[ソース>http://www.kowa.org/modules/pukiwiki/index.php?plugin=source&page=%5B%5B%3Aconfig%2Fplugin%2Fweblog%2Fdefault%2FpageMonthly%5D%5D]] ]
+|TCENTER:90% LEFT:100%|c
+|->
+#include(:config/plugin/weblog/default/pageMonthly,notitle)->
+|
+**[[作成する日別一覧ページのテンプレート>:config/plugin/weblog/default/pageDaily]]
+RIGHT:[ [[ソース>http://www.kowa.org/modules/pukiwiki/index.php?plugin=source&page=%5B%5B%3Aconfig%2Fplugin%2Fweblog%2Fdefault%2FpageDaily%5D%5D]] ]
+|TCENTER:90% LEFT:100%|c
+|->
+#include(:config/plugin/weblog/default/pageDaily,notitle)->
+|
+**[[ViewerListのテンプレート>:config/plugin/weblog/default/list]]
+RIGHT:[ [[ソース>http://www.kowa.org/modules/pukiwiki/index.php?plugin=source&page=%5B%5B%3Aconfig%2Fplugin%2Fweblog%2Fdefault%2Flist%5D%5D]] ]
+|TCENTER:90% LEFT:100%|c
+|->
+#include(:config/plugin/weblog/default/list,notitle)->
+|
