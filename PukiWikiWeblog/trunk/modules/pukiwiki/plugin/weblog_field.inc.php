@@ -59,8 +59,18 @@ function plugin_weblog_field_convert() {
 }
 /*
  * $Log$
+ * Revision 1.4  2004/02/25 08:56:46  nobu
+ * CVS用$Logの過去分履歴の補完
+ *
  * Revision 1.3  2004/02/25 08:37:14  nobu
  * CVS用キーワード追加（$Id及び$Log)
+ *
+ * Revision 1.2  2004/02/25 05:43:30  nobu
+ * -不要なコメント行を削除
+ * -編集のアイコンをparaedit.pngからedit.pngに変更
+ *
+ * Revision 1.1  2004/02/25 05:27:40  nobu
+ * PukiWikiMod用weblogプラグイン初期リリース
  *
  */
 ?>
