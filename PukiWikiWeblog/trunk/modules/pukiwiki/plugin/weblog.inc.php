@@ -129,18 +129,18 @@ function plugin_weblog_action_save()
 	$author = ($post['author'] == '') ? $_weblog_msgs['no_name'] : $post['author'];
 	if ($X_uid == 0) {
 		$contents_auth = "// author:0\n";
-		$author = "&weblog_field(__AUTHOR){".$no_name."(".$author.")};";
+		$tmpl_val['__AUTHOR'] = "&weblog_field(__AUTHOR){".$no_name."(".$author.")};";
 	} else {
         $contents_auth = "#freeze	uid:$X_uid	aid:0	gid:0\n// author:".$X_uid."\n";
-		$author = "&weblog_field(__AUTHOR){".$author."};";
+		$tmpl_val['__AUTHOR'] = "&weblog_field(__AUTHOR){".$author."};";
 	}
 
 	//投稿日時
-	$timestamp_str = "&weblog_field(__TIMESTAMP){{$timestamp}};";
+	$tmpl_val['__TIMESTAMP'] = "&weblog_field(__TIMESTAMP){{$timestamp}};";
 	
 	//件名
 	$subject = ($post['subject'] == '') ? $_weblog_msgs['no_subject'] : $post['subject'];
-	$subject = "&weblog_field(__SUBJECT){{$subject}};";
+	$tmpl_val['__SUBJECT'] = "&weblog_field(__SUBJECT){{$subject}};";
 	
 	//カテゴリー
 	if ($post['category'] == ''){
@@ -151,38 +151,36 @@ function plugin_weblog_action_save()
 	$catprefix = sprintf(strip_bracket($options['CATEGORY_PREFIX']),$prefix);
 	$catpage = "$catprefix/$category";
 	
-	$category = plugin_weblog_category_maketag($catprefix,$category);
+	$tmpl_val['__CATEGORY'] = plugin_weblog_category_maketag($catprefix,$category);
+	
 	//本文
 	$body = rtrim($post['body']);
 	$body = preg_replace("/\s*((\x0D\x0A)|(\x0D)|(\x0A))/", "\n", $body);
-
 	$body = rep_for_pre($body);
+	//自動改行処理
 	if ($post['auto_br']) {
 		$body = auto_br($body);
 	}
-	$body = "#weblog_field(__BODY,Start)\n$body\n\n#weblog_field(__BODY,End)\n\n";
+	$tmpl_val['__BODY'] = "#weblog_field(__BODY,Start)\n$body\n\n#weblog_field(__BODY,End)\n\n";
+	
 	//コメント
 	if ($post['allow_comment']) {
 		$comment_prefix = sprintf(strip_bracket($options['COMMENT_PREFIX']),$prefix);
-		$comment = "#pcomment(".add_bracket($comment_prefix."/$_page").",10,above)\n";
+		$tmpl_val['__COMMENT'] = "#pcomment(".add_bracket($comment_prefix."/$_page").",10,above)\n";
+	} else {
+		$tmpl_val['__COMMENT'] =  $_weblog_msgs['message_disable_comment'];
 	}
-	$edit_link = "&weblog_field(__EDIT,$conf_name);";
-
-	$ping_url = "#ping(\\1)";
+	//EDITボタン
+	$tmpl_val['__EDIT'] = "&weblog_field(__EDIT,$conf_name);";
+	
+	//PING
+	$tmpl_val['__PING'] = array("([^\]]*)","#ping(\\1)");
 
 	//  (Write WebLog Article to an individual file)
 	//テンプレート(page)からの読込
-	$contents = plugin_weblog_load_template($conf_name,"page");
+	$contents = weblog_load_template($conf_name,"page");
 	//フィールドの置換
-	$contents = preg_replace("/\[__SUBJECT\]/",$subject,$contents);
-	$contents = preg_replace("/\[__TITLE\]/",$title,$contents);
-	$contents = preg_replace("/\[__AUTHOR\]/",$author,$contents);
-	$contents = preg_replace("/\[__TIMESTAMP\]/",$timestamp_str,$contents);
-	$contents = preg_replace("/\[__CATEGORY\]/",$category,$contents);
-	$contents = preg_replace("/\[__BODY\]/",$body,$contents);
-	$contents = preg_replace("/\[__COMMENT\]/",$comment,$contents);
-	$contents = preg_replace("/\[__EDIT\]/",$edit_link,$contents);
-	$contents = preg_replace("/\[__PING\:([^\]]*)\]/",$ping_url,$contents);
+	$contents = weblog_assign_value($contents,$tmpl_val);
 	//ページの書込
 	$vars['page'] = $page;
 	if ($mode == "new") {
@@ -199,48 +197,45 @@ function plugin_weblog_action_save()
 	} else {
 		page_write($page,$contents_auth.$contents,true);
 	}
-	//月別インデックスの作成
 	$postmonth = date("Y-m",$timestamp);
 	$postmonth_str = date($_weblog_msgs['fmt_month'],$timestamp);
+	$postday = date("Y-m-d",$timestamp);
+	$postday_str=date($_weblog_msgs['fmt_day'],$timestamp);
 	//当月のインデックスページ名取得
 	$monthpage=sprintf(strip_bracket($options['MONTHLY_PREFIX']),$prefix)."/$postmonth";
+	//当日のインデックスページ名取得
+	$daypage=sprintf(strip_bracket($options['DAILY_PREFIX']),$prefix)."/$postday";
+	
+	$tmpl_val['__CONF'] = $conf_name;
+	$tmpl_val['__BASELINK'] = "[[$prefix]]";
+	$tmpl_val['__MONTH'] = $postmonth;
+	$tmpl_val['__MONTHNAME'] = $postmonth_str;
+	$tmpl_val['__MONTHLINK'] = "[[$postmonth_str>$monthpage]]";
+	$tmpl_val['__DAY'] = $postday;
+	$tmpl_val['__DAYNAME'] = $postday_str."(".$_msg_week[date("w",$timestamp)].")";
+
+	//月別インデックスの作成
 	//月別インデックスが存在しないときのみ作成する。
 	if (!is_page($monthpage)) {
 		//権限設定
 		$monthly_auth = "#freeze\tuid:1\taid:0\tgid:0\n// author:1\n";	
 		//テンプレート(pageMonthly)からの読込
-		$monthly_body = plugin_weblog_load_template($conf_name,"pageMonthly");
+		$monthly_body = weblog_load_template($conf_name,"pageMonthly");
 		//フィールドの置換
-		$monthly_body = preg_replace("/\[__CONF\]/",$conf_name,$monthly_body);
-		$monthly_body = preg_replace("/\[__MONTHNAME\]/",$postmonth_str,$monthly_body);
-		$monthly_body = preg_replace("/\[__MONTH\]/",$postmonth,$monthly_body);
-		$monthly_body = preg_replace("/\[__BASELINK\]/","[[$prefix]]",$monthly_body);
-		$monthly_body .= $source;
+		$monthly_body = weblog_assign_value($monthly_body,$tmpl_val);
 		//ページの書込
 		$vars['page'] = $monthpage;
 		page_write($monthpage,$monthly_auth.$monthly_body,$notimestamp=FALSE);
 	}
 	//日別インデックスの作成
-	$postday = date("Y-m-d",$timestamp);
-	$postday_str=date($_weblog_msgs['fmt_day'],$timestamp);
-	$postday_str.="(".$_msg_week[date("w",$timestamp)].")";
-	$postday_fullstr=date($_weblog_msgs['fmt_fullday'],$timestamp);
-	$postday_fullstr.="(".$_msg_week[date("w",$timestamp)].")";
-	//当日のインデックスページ名取得
-	$daypage=sprintf(strip_bracket($options['DAILY_PREFIX']),$prefix)."/$postday";
 	//日別インデックスが存在しないときのみ作成する。
 	if (!is_page($daypage)) {
 		//権限設定
 		$daily_auth = "#freeze\tuid:1\taid:0\tgid:0\n// author:1\n";
 		//テンプレート(pageDaily)からの読込
-		$daily_body = plugin_weblog_load_template($conf_name,"pageDaily");
+		$daily_body = weblog_load_template($conf_name,"pageDaily");
 		//フィールドの置換
-		$daily_body = preg_replace("/\[__CONF\]/",$conf_name,$daily_body);
-		$daily_body = preg_replace("/\[__DAY\]/",$postday,$daily_body);
-		$daily_body = preg_replace("/\[__DAYNAME\]/",$postday_str,$daily_body);
-		$daily_body = preg_replace("/\[__MONTH\]/",$postmonth,$daily_body);
-		$daily_body = preg_replace("/\[__BASELINK\]/","[[$prefix]]",$daily_body);
-		$daily_body = preg_replace("/\[__MONTHLINK\]/","[[$postmonth_str>$monthpage]]",$daily_body);
+		$daily_body = weblog_assign_value($daily_body,$tmpl_val);
 		//ページの書込
 		$vars['page'] = $daypage;
 		page_write($daypage,$daily_auth.$daily_body,$notimestamp=FALSE);
@@ -463,25 +458,6 @@ EOD;
 	return $string;
 }
 
-function plugin_weblog_load_template($conf_name,$template) {
-	$retstr = "";
-	$_page = ":config/plugin/weblog/$conf_name/$template";
-	if (!is_page($_page)) {
-		$_page = ":config/plugin/weblog/default/$template";
-		if (!is_page($_page)) {
-			return FALSE;
-		}
-	}
-	$sources = get_source($_page);
-	foreach ($sources as $source) {
-		$source = preg_replace('/^(\*{1,6}.*)\[#[A-Za-z][\w-]+\](.*)$/m','$1$2',$source);
-		$source = preg_replace("/^#freeze(?:\tuid:([0-9]+))?(?:\taid:([0-9,]+))?(?:\tgid:([0-9,]+))?\n/",'',$source);
-		$source = preg_replace("/^#unvisible(?:\tuid:([0-9]+))?(?:\taid:([0-9,]+|all))?(?:\tgid:([0-9,]+))?\n/",'',$source);
-		$source = preg_replace("/^\/\/ author:([0-9]+)\n/","",$source);
-		$retstr .= $source;
-	}
-	return $retstr;
-}
 function plugin_weblog_category_maketag($prefix,$category)
 {
 	$base = $prefix."/";
