@@ -421,22 +421,4 @@ function plugin_weblog_viewer_check_args()
 	}
 	return $params;
 }
-/*
- * $Log$
- * Revision 1.5  2004/02/25 08:56:46  nobu
- * CVS—p$Log‚Ì‰ß‹Ž•ª—š—ð‚Ì•âŠ®
- *
- * Revision 1.4  2004/02/25 08:37:14  nobu
- * CVSÍÑ¥­¡¼¥ï¡¼¥ÉÄÉ²Ã¡Ê$IdµÚ¤Ó$Log)
- *
- * Revision 1.3  2004/02/25 05:44:11  nobu
- * -ÉÔÍ×¤Ê¥³¥á¥ó¥È¹Ô¤òºï½ü
- *
- * Revision 1.2  2004/02/25 05:28:45  nobu
- * weblog_viewer¥×¥é¥°¥¤¥ó¤Ç»ÈÍÑ¤·¤Æ¤¤¤¿ÆÈ¼«¤Î¥¹¥¿¥¤¥ë¤ÎÄêµÁ¤òcalendar¤Èk¶¦ÍÑ¤¹¤ë¤è¤¦¤ËÊÑ¹¹¡£
- *
- * Revision 1.1  2004/02/25 05:27:40   nobu
- * PukiWikiModÍÑweblog¥×¥é¥°¥¤¥ó½é´ü¥ê¥ê¡¼¥¹
- *
- */
 ?>

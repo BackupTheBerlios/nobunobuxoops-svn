@@ -147,25 +147,4 @@ function weblog_conv_knj_escape($str)
 function _weblog_conv_escape($matches){
 	return mb_convert_encoding(rawurldecode("%".$matches[1]."%".$matches[2]),"EUC-JP","UCS-2");
 }
-/*
- * $Log$
- * Revision 1.5  2004/02/25 08:56:46  nobu
- * CVS—p$Log‚Ì‰ß‹Ž•ª—š—ð‚Ì•âŠ®
- *
- * Revision 1.4  2004/02/25 08:37:14  nobu
- * CVSÍÑ¥­¡¼¥ï¡¼¥ÉÄÉ²Ã¡Ê$IdµÚ¤Ó$Log)
- *
- * Revision 1.3  2004/02/25 05:45:47  nobu
- * -¥Æ¥ó¥×¥ì¡¼¥ÈÊ¸»úÎóÃÖ´¹ÍÑ¶¦ÄÌ´Ø¿ô(weblog_assign_value)¤òÄÉ²Ã
- * -¶¦ÄÌ¥á¥Ã¥»¡¼¥¸¤ÎÄÉ²Ã
- *
- * Revision 1.2  2004/02/25 05:35:53  nobu
- * -À¸À®¥Ú¡¼¥¸¤Î¥Æ¥ó¥×¥ì¡¼¥È¤Ç[__PING:http://¡¦¡¦¡¦¡¦]·Á¼°¤ÇPING¥µ¡¼¥Ð¤Î»ØÄê¤ò²ÄÇ½\¤Ë¡£
- * -µ­»öÊÔ½¸»þ¤Ë¥¿¥¤¥à¥¹¥¿¥ó¥×¤òÊÑ¹¹¤¹¤ë¾ì¹ç¤Ï¡¢¥Õ¥¡¥¤¥ëÌ¾¤âÊÑ¹¹¡£(¸½¾õ¤Ç¤Ï¡¢ÀÅÅªURL¤âÊÑ¤ï¤ë)
- * -BlogThisÍÑ¥Ý¥Ã¥×¥¢¥Ã¥×¥â¡¼¥É¤Ç¤ÎÅê¹Æ¸å¤Î²èÌÌÁ«°Ü¤ò²þÁ±
- *
- * Revision 1.1  2004/02/25 05:27:40  nobu
- * PukiWikiModÍÑweblog¥×¥é¥°¥¤¥ó½é´ü¥ê¥ê¡¼¥¹
- *
- */
 ?>

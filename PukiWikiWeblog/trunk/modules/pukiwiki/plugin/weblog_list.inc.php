@@ -495,19 +495,4 @@ function weblog_viewer_check_arg($val, $key, &$params)
 	}
 	$params['_args'][] = $val;
 }
-/*
- * $Log$
- * Revision 1.4  2004/02/25 08:56:46  nobu
- * CVS—p$Log‚Ì‰ß‹Ž•ª—š—ð‚Ì•âŠ®
- *
- * Revision 1.3  2004/02/25 08:37:14  nobu
- * CVSÍÑ¥­¡¼¥ï¡¼¥ÉÄÉ²Ã¡Ê$IdµÚ¤Ó$Log)
- *
- * Revision 1.2  2004/02/25 05:42:00  nobu
- * -weblog_common.inc.php¤Î¶¦ÄÌ´Ø¿ô¤ò»ÈÍÑ¤¹¤ë¤è¤¦¤Ë½¤Àµ
- *
- * Revision 1.1  2004/02/25 05:27:40  nobu
- * PukiWikiModÍÑweblog¥×¥é¥°¥¤¥ó½é´ü¥ê¥ê¡¼¥¹
- *
- */
 ?>
