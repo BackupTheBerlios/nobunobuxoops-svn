@@ -54,9 +54,26 @@ function plugin_weblog_action()
 			list($vars['page'],$vars['refer']) = weblog_set_return($vars['page'],$prefix);
 			return array('msg'=>"<p><strong>{$_weblog_msgs['err_msg_noauth']}</strong></p>\n",'body'=>'');
 		}
+		$body = plugin_weblog_make_form($conf_name,"new","",$subject,$body,$category);
+		if ($vars['popup']=='true') {
+			echo <<<EOD
+<html>
+<head>
+<title>$weblog_name への新規投稿</title>
+<link rel="stylesheet" href="skin/default.ja.css" type="text/css" media="screen" charset="shift_jis">
+<link rel="stylesheet" href="cache/css.css" type="text/css" media="screen" charset="shift_jis">
+</head>
+<body>
+<h3>$weblog_name への新規投稿</h3>
+$body
+</body>
+</html>
+EOD;
+			exit;
+		}
 		return array(
 			'msg' => $weblog_name,
-			'body' => plugin_weblog_make_form($conf_name,"new","",$subject,$body,$category),
+			'body' => $body,
 		);
 	}
 }
@@ -318,7 +335,12 @@ function plugin_weblog_inline()
 		$link .= "else%20if(d.getSelection){t=d.getSelection()}";
 		$link .= "else%20if(w.getSelection){t=w.getSelection()}";
 		$link .= "void(w.open('".$script."?plugin=weblog&conf=".$prms[1];
-		$link .= "&subject='+escape(d.title)+'&body='+escape(t+'\n****参考ページ\n-[['+d.title+':'+d.location.href+']]\n')))";
+		$link .= "&subject='+escape(d.title)+'&body='+escape(t+'\\n****参考ページ\\n-[['+d.title+':'+d.location.href+']]\\n')";
+		if ($prms[2] == "popup") {
+			$link .= "+'&popup=true','_blank','scrollbars=yes,width=640,height=480,status=yes,resizable=yes'))";
+		} else {
+			$link .= "))";
+		}
 		$body .= "<a href=\"$link\" >[BlogThis!]</a>";
 	}
 	return $body;
