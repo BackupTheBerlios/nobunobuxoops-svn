@@ -36,45 +36,16 @@ function plugin_weblog_init() {
 function plugin_weblog_action()
 {
 	global $vars;
-	global $options, $_weblog_msgs;
 	
 	if ($vars["mode"] == "edit") {
+		//記事の編集フォーム表示
 		return plugin_weblog_action_edit();
 	} else if ($vars["mode"] == "new" || $vars["mode"] == "save") {
+		//フォームより投稿された記事の保存
 		return plugin_weblog_action_save();
 	} else {
-		$conf_name = $vars['conf'];
-		$subject = weblog_conv_knj_escape($vars['subject']);
-		$body = weblog_conv_knj_escape($vars['body']);
-		$category = $vars['category'];
-		$options = weblog_get_options($conf_name,$options);
-		$weblog_name = $options['NAME'];
-		$prefix = strip_bracket($options['PREFIX']);
-		if (!edit_auth($prefix,FALSE,FALSE)) {
-			list($vars['page'],$vars['refer']) = weblog_set_return($vars['page'],$prefix);
-			return array('msg'=>"<p><strong>{$_weblog_msgs['err_msg_noauth']}</strong></p>\n",'body'=>'');
-		}
-		$body = plugin_weblog_make_form($conf_name,"new","",$subject,$body,$category);
-		if ($vars['popup']=='true') {
-			echo <<<EOD
-<html>
-<head>
-<title>$weblog_name への新規投稿</title>
-<link rel="stylesheet" href="skin/default.ja.css" type="text/css" media="screen" charset="shift_jis">
-<link rel="stylesheet" href="cache/css.css" type="text/css" media="screen" charset="shift_jis">
-</head>
-<body>
-<h3>$weblog_name への新規投稿</h3>
-$body
-</body>
-</html>
-EOD;
-			exit;
-		}
-		return array(
-			'msg' => $weblog_name,
-			'body' => $body,
-		);
+		//新規投稿用フォームの表示
+		return plugin_weblog_action_new();
 	}
 }
 function plugin_weblog_action_save()
@@ -87,19 +58,26 @@ function plugin_weblog_action_save()
 	//  途中で別ファイル書き込み時に変更するが、後で戻す必要がある。
 	$page_orig = $vars['page'];
 	$mode = $vars['mode'];
+	$old_page = "";
 	if ($mode == "new") {
 		//新規作成時、現在日時の取得
 		$timestamp=time();
 	} else {
 		//編集時、対象ページ名より取得
 		$_page = $vars['page_name'];
-		$t_year = substr($_page,0,4);
-		$t_month = substr($_page,5,2);
-		$t_day = substr($_page,8,2);
-		$t_hour = substr($_page,11,2);
-		$t_min = substr($_page,13,2);
-		$t_sec = substr($_page,15,2);
-		$timestamp=mktime($t_hour,$t_min,$t_sec,$t_month,$t_day,$t_year);
+		if ($post['update_stamp']==1) {
+			$old_page = $_page;
+			$timestamp=time();
+			$mode="renew";
+		} else {
+			$t_year = substr($_page,0,4);
+			$t_month = substr($_page,5,2);
+			$t_day = substr($_page,8,2);
+			$t_hour = substr($_page,11,2);
+			$t_min = substr($_page,13,2);
+			$t_sec = substr($_page,15,2);
+			$timestamp=mktime($t_hour,$t_min,$t_sec,$t_month,$t_day,$t_year);
+		}
 	}
 	
 	//コンフィグの読み込み(指定weblog固有)
@@ -109,7 +87,7 @@ function plugin_weblog_action_save()
 	$prefix = strip_bracket($options['PREFIX']);
 	
 	//ページ名の設定
-	if ($mode == "new") {
+	if (($mode == "new")||($mode == "renew")) {
 		//新規作成時には、prefix/YYYYMMDD-HHMMSS の形式で作成（重複時は -nn の形式でSuffix)
 		$i = 0;
 		$postdaytime_str = date("Y-m-d-His",$timestamp);
@@ -130,6 +108,12 @@ function plugin_weblog_action_save()
 	if ($mode == "new") {
 		//新規作成時には、親ページの権限を元に判断
 		if (!edit_auth($prefix,FALSE,FALSE)) {
+			list($vars['page'],$vars['refer']) = weblog_set_return($page_orig,$prefix);
+			return array('msg'=>"<p><strong>{$_weblog_msgs['err_msg_noauth']}</strong></p>\n",'body'=>'');
+		}
+	} else if($mode == "renew") {
+		//書換時には、元ページの権限を元に判断
+		if (!edit_auth($old_page,FALSE,FALSE)) {
 			list($vars['page'],$vars['refer']) = weblog_set_return($page_orig,$prefix);
 			return array('msg'=>"<p><strong>{$_weblog_msgs['err_msg_noauth']}</strong></p>\n",'body'=>'');
 		}
@@ -184,6 +168,8 @@ function plugin_weblog_action_save()
 	}
 	$edit_link = "&weblog_field(__EDIT,$conf_name);";
 
+	$ping_url = "#ping(\\1)";
+
 	//  (Write WebLog Article to an individual file)
 	//テンプレート(page)からの読込
 	$contents = plugin_weblog_load_template($conf_name,"page");
@@ -196,10 +182,20 @@ function plugin_weblog_action_save()
 	$contents = preg_replace("/\[__BODY\]/",$body,$contents);
 	$contents = preg_replace("/\[__COMMENT\]/",$comment,$contents);
 	$contents = preg_replace("/\[__EDIT\]/",$edit_link,$contents);
+	$contents = preg_replace("/\[__PING\:([^\]]*)\]/",$ping_url,$contents);
 	//ページの書込
 	$vars['page'] = $page;
-	if (($mode == "new") || ($post['update_stamp']==1)) {
+	if ($mode == "new") {
 		page_write($page,$contents_auth.$contents);
+	} else if ($mode == "renew"){
+		page_write($page,$contents_auth.$contents);
+		//古いファイルを削除しＤＢ関係を更新
+		$old_page = add_bracket("$prefix/$old_page");
+		@unlink(DATA_DIR.$dir.encode($old_page).".txt");
+		is_page($old_page,true);
+		links_update($old_page);
+		pginfo_db_write($old_page,"delete");
+		delete_page_html($old_page);
 	} else {
 		page_write($page,$contents_auth.$contents,true);
 	}
@@ -255,11 +251,64 @@ function plugin_weblog_action_save()
 		$r_page = rawurlencode(strip_bracket($page));
 		$retmsg = $_weblog_msgs['message_ping']."<img style=\"float:left\" src=\"".XOOPS_URL."/modules/pukiwiki/ping.php?$r_page\" width=1 height=1/> </br>";
 	}
-	//正常終了のメッセージ出力
-	list($vars['page'],$vars['refer']) = weblog_set_return($page_orig,$prefix);
-	return array('msg'=>"$retmsg{$_weblog_msgs['message_sent']}\n",'body'=>'');
+	if ($vars['popup'] != "true") {
+		//正常終了のメッセージ出力
+		list($vars['page'],$vars['refer']) = weblog_set_return($page_orig,$prefix);
+		return array('msg'=>"$retmsg{$_weblog_msgs['message_sent']}\n",'body'=>'');
+	} else {
+		echo <<< EOD
+<link rel="stylesheet" href="skin/default.ja.css" type="text/css" media="screen" charset="shift_jis">
+<link rel="stylesheet" href="cache/css.css" type="text/css" media="screen" charset="shift_jis">
+</head>
+<body>
+$retmsg{$_weblog_msgs['message_sent_complete']}
+</body>
+</html>
+EOD;
+		exit;
+	}
 }
 
+function plugin_weblog_action_new()
+{
+	global $vars;
+	global $options, $_weblog_msgs;
+
+	$conf_name = $vars['conf'];
+	$subject = weblog_conv_knj_escape($vars['subject']);
+	$body = weblog_conv_knj_escape($vars['body']);
+	$category = $vars['category'];
+	$options = weblog_get_options($conf_name,$options);
+	$weblog_name = $options['NAME'];
+	$prefix = strip_bracket($options['PREFIX']);
+	if (!edit_auth($prefix,FALSE,FALSE)) {
+		list($vars['page'],$vars['refer']) = weblog_set_return($vars['page'],$prefix);
+		return array('msg'=>"<p><strong>{$_weblog_msgs['err_msg_noauth']}</strong></p>\n",'body'=>'');
+	}
+	$body = plugin_weblog_make_form($conf_name,"new","",$subject,$body,$category,'',$vars['popup']);
+	$title = sprintf($_weblog_msgs['lbl_new_title'],$weblog_name);
+	if ($vars['popup']=='true') {
+		echo <<<EOD
+<html>
+<head>
+<title>$title</title>
+<link rel="stylesheet" href="skin/default.ja.css" type="text/css" media="screen" charset="shift_jis">
+<link rel="stylesheet" href="cache/css.css" type="text/css" media="screen" charset="shift_jis">
+</head>
+<body>
+<h3>$title</h3>
+$body
+</body>
+</html>
+EOD;
+		exit;
+	}
+	return array(
+		'msg' => $title,
+		'body' => $body,
+	);
+
+}
 function plugin_weblog_action_edit()
 {
 	global $script,$post,$vars;
@@ -346,7 +395,7 @@ function plugin_weblog_inline()
 	return $body;
 }
 
-function plugin_weblog_make_form($conf_name,$mode="new",$page_name="",$subject="",$body="",$category="",$author="")
+function plugin_weblog_make_form($conf_name,$mode="new",$page_name="",$subject="",$body="",$category="",$author="",$popup="")
 {
 	global $script,$vars,$digest;
 	global $xoopsOption;
@@ -373,12 +422,13 @@ function plugin_weblog_make_form($conf_name,$mode="new",$page_name="",$subject="
 	$allow_comment = ($options['ALLOW_COMMENT']==1) ? 'checked' : '';
 	$update_stamp = ($options['UPDATE_STAMP']==1) ? 'checked' : '';
 	$string = <<<EOD
-<form action="$script" method="post">
+<form name="weblog_form" action="$script" method="post">
  <div>
   <input type="hidden" name="plugin" value="weblog" />
   <input type="hidden" name="digest" value="$s_digest" />
   <input type="hidden" name="config" value="$conf_name" />
   <input type="hidden" name="mode" value="$mode" />
+  <input type="hidden" name="popup" value="$popup" />
   <input type="hidden" name="page_name" value="$page_name" />
 EOD;
 	if ($author=="" || (($mode=="save") && (!$xoopsUser))) {
