@@ -1,4 +1,5 @@
 <?php
+// PukiWiki - Yet another WikiWikiWeb clone.
 // $Id$
 /*
 Last-Update:2002-10-29 rev.8
@@ -36,6 +37,8 @@ Last-Update:2002-10-29 rev.8
  Newマークを付けない。
 */
 
+require_once "weblog_common.inc.php";
+
 define('WEBLOG_LIST_CONTENT_HEAD','#content_1_'); // html.php 1.36以降
 define('WEBLOG_LIST_ANCHOR_ORIGIN',0); // html.php 1.36以降
 
@@ -46,37 +49,20 @@ function plugin_weblog_list_init() {
 	if (!isset($_weblog_list_anchor)) {
 		$_weblog_list_anchor = 0;
 	}
-	if (LANG=='ja') {
-		$messages = array('_weblog_list_msgs'=>	array(
-			'err_nopages' => '<p>\'$1\' には、下位層のページがありません。</p>',
-			'msg_title' => '\'$1\'で始まるページの一覧',
-			'msg_go' => '<span class="small">...</span>',
-			'msg_no_conf' => '指定したWeblog用の設定ファイルが見つかりません<br />',
-			'msg_daily' => '%s%sの投稿(%d件)',
-		));
-	} else {
-		$messages = array('_weblog_list_msgs'=>	array(
-			'err_nopages' => '<p>\'$1\' has no child page.</p>',
-			'msg_title' => 'Page Listing begining from \'$1\'',
-			'msg_go' => '<span class="small">...</span>',
-			'msg_no_conf' => 'Config file for Weblog does not exit.<br />',
-		));
+	//メッセージの設定
+	if (count($_weblog_msgs) == 0) {
+		weblog_msg_init();
 	}
-	set_plugin_messages($messages);
-	
-	$config = new Config('plugin/weblog/default');
-	if (!$config->read()) {
-		$options = array( "Error");
-	}
-	foreach ($config->get('Config') as $conf_item) {
-		$options[$conf_item[0]] = $conf_item[1];
-	}
+
+	//コンフィグの取得(default)
+	$options = array();
+	$options = weblog_get_options("default",$options);
 
 }
 
 function plugin_weblog_list_convert() {
 	global $script,$vars;
-	global $options, $_weblog_list_msgs;
+	global $options, $_weblog_msgs;
 
 	if (func_num_args()>=2) {
 		$args = func_get_args();
@@ -85,15 +71,14 @@ function plugin_weblog_list_convert() {
 	} else {
 		$args = array();
 	}
-	$config = new Config("plugin/weblog/$conf_name");
-	if ($config->read()) {
-		foreach ($config->get('Config') as $conf_item) {
-			$options[$conf_item[0]] = $conf_item[1];
-		}
-	} else {
-		return $_weblog_list_msgs['msg_no_conf'];
+	$conf_name = $conf_name;
+	$options = weblog_get_options($conf_name,$options);
+
+	if (count($options) == 0) {
+		return "[weblog_list]:".sprintf($_weblog_msgs['err_msg_noconf'],$conf_name);
 	}
-// 他のパラメータチェック
+
+	// 他のパラメータチェック
 	$params = array(
 		'count' => FALSE,
 		'limit' => FALSE,
@@ -114,20 +99,20 @@ function plugin_weblog_list_convert() {
 	if ($params['month']) {
 		if (preg_match("/([0-9]{4})-([0-9]{2})/",$params['month'],$m)) {
 			if (!checkdate($m[2], 1, $m[1])) {
-				return $_weblog_list_msgs['msg_invalid_param'];
+				return $_weblog_msgs['msg_invalid_param'];
 			}
 		} else {
-			return $_weblog_list_msgs['msg_invalid_param'];
+			return $_weblog_msgs['msg_invalid_param'];
 		}
 	}
 	
 	if ($params['day']) {
 		if (preg_match("/([0-9]{4})-([0-9]{2})-([0-9]{2})/",$params['day'],$m)) {
 			if (!checkdate($m[2], $m[3], $m[1])) {
-				return $_weblog_list_msgs['msg_invalid_param'];
+				return $_weblog_msgs['msg_invalid_param'];
 			}
 		} else {
-			return $_weblog_list_msgs['msg_invalid_param'];
+			return $_weblog_msgs['msg_invalid_param'];
 		}
 	}
 	$prefix = strip_bracket($options['PREFIX']);
@@ -186,13 +171,13 @@ function plugin_weblog_list_convert() {
 			return weblog_viewer_show_calendar($pattern,$params);
 			break;
 		default:
-			return $_weblog_list_msgs['msg_invalid_param'];
+			return $_weblog_msgs['msg_invalid_param'];
 	}
 	return weblog_viewer_show_lists($pattern,$params);
 }
 
 function weblog_viewer_show_lists($pattern,&$params) {
-	global $options, $_weblog_list_msgs;
+	global $options, $_weblog_msgs;
 	$pages = weblog_viewer_get_child_pages($pattern,$params['depth']);
 
 	if ($params['reverse']) $pages = array_reverse($pages);
@@ -202,7 +187,7 @@ function weblog_viewer_show_lists($pattern,&$params) {
 	}
 
 	if (count($pages) == 0) {
-		return str_replace('$1',htmlspecialchars($pattern),$_weblog_list_msgs['err_nopages']);
+		return str_replace('$1',htmlspecialchars($pattern),$_weblog_msgs['err_nopages']);
 	}
 
 	$ret = '<ul>';
@@ -228,7 +213,7 @@ function weblog_viewer_count_contents($page,$pattern,&$params) {
 
 function weblog_viewer_show_headings($page,&$params,$prefix="",$child_count="") {
 	global $script,$auto_template_name;
-	global $_weblog_list_anchor, $_weblog_list_msgs;
+	global $_weblog_list_anchor, $_weblog_msgs;
 	static $_auto_template_name = "";
 	
 	if (!$_auto_template_name) $_auto_template_name = preg_quote($auto_template_name,'/');
@@ -322,7 +307,6 @@ function weblog_viewer_show_headings($page,&$params,$prefix="",$child_count="") 
 		$new_mark = do_plugin_inline("new","{$page}/,nolink","");
 	
 	$ret .= '<a id="list_'.$params[$page].'" href="'.$href.'" title="'.$title.'">'.$name.'</a>'.$new_mark;
-	//$ret .= '<a id="list_'.$params[$page].'" href="'.$href.'" title="'.$title.'">'.htmlspecialchars($name).'</a>'.$new_mark;
 	$anchor = WEBLOG_LIST_ANCHOR_ORIGIN;
 	$_ret = '';
 	if ($_ret != '') { $ret .= "<ul>$_ret</ul>\n"; }
@@ -353,7 +337,7 @@ function weblog_viewer_get_child_pages($pattern,$depth=FALSE) {
 //カレンダーを表示する
 function weblog_viewer_show_calendar($prefix,&$params) {
 	global $script,$weeklabels,$vars,$command,$WikiName,$BracketName;
-	global $options, $_weblog_list_msgs;
+	global $options, $_weblog_msgs;
 
 	require_once("calendar2.inc.php");
 	
@@ -420,7 +404,7 @@ function weblog_viewer_show_calendar($prefix,&$params) {
 		} else {
 			if ($params['c_prefix']) {
 				$child_count = weblog_viewer_count_contents($name,$prefix,$params);
-				$day_title = sprintf($_weblog_list_msgs['msg_daily'],$dt,$title_tag,$child_count);
+				$day_title = sprintf($_weblog_msgs['msg_daily'],$dt,$title_tag,$child_count);
 			} else {
 				$day_title = "$name $title_tag";
 			}
