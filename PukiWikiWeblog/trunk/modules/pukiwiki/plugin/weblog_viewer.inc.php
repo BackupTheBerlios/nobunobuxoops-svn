@@ -289,9 +289,6 @@ function plugin_weblog_viewer_convert()
 		$w_sources = preg_replace("/\[__TRACKBACKCOUNT\]/",$w_trackback,$w_sources);
 		$weblog_content = convert_html($w_sources,false,false);
 
-//		$tb_tag = ($trackback)? "[ <a href=\"$script?plugin=tb&amp;__mode=view&amp;tb_id=".tb_get_id($vars['page'])."\">TrackBack(".tb_count($vars['page']).")</a> ]" : "";
-//		$weblog_content = preg_replace("/\[__TRACKBACKCOUNT\]/",$tb_tag,$weblog_content);
-
 		if (!is_freeze($page,FALSE)) {
 			$_page = preg_replace("/(.*\/)?([0-9\-]+)$/","\\2",strip_bracket($vars['page']));
 			$edit_tag = "<a href=\"$script?plugin=weblog&mode=edit&conf=$conf_name&page_name=$_page\">";
