@@ -34,6 +34,7 @@ if (sysutil_get_xoops_option('sysutil', 'sysutil_change_lang_conf')) {
 		} else {
 			$xoopsConfig['language'] = sysutil_get_xoops_option('sysutil', 'sysutil_default_lang');
 		}
+		$sysutil_ml_langname = $xoopsConfig['language'];
 	}
 	if (empty($_COOKIE[SYSUTIL_ML_COOKIE_NAME]) || ($_COOKIE[SYSUTIL_ML_COOKIE_NAME] != $xoopsConfig['language'])) {
 		setcookie(SYSUTIL_ML_COOKIE_NAME, $sysutil_ml_langname, time() + SYSUTIL_ML_COOKIELIFETIME, $xoops_cookie_path, '' , 0);
@@ -114,6 +115,7 @@ function sysutil_ml_getlangname($lang = '')
 	return false;
 }
 function sysutil_ml_getlangbyname($langname) {
+	include_once XOOPS_ROOT_PATH."/class/xoopslists.php";
 	$lang_available = XoopsLists::getLangList();
 	If ( ($langname != '') && (in_array($langname, $lang_available)) ) {
 		$sysutil_ml_langnames = explode(',', SYSUTIL_ML_LANGNAMES);
