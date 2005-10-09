@@ -21,7 +21,7 @@ define('SYSUTIL_AUTOLOGIN_LIFETIME', sysutil_get_xoops_option('sysutil', 'sysuti
 
 if (empty($_SESSION['xoopsUserId'])) {
 	if(isset($_COOKIE['autologin_uname']) && isset($_COOKIE['autologin_pass'])) {
-		$confirm_url = '/modules/autologin/index.php';
+		$confirm_url = '/modules/sysutil/index.php';
 		if( ! empty( $_POST ) ) {
 			$_SESSION['AUTOLOGIN_POST'] = $_POST ;
 			$_SESSION['AUTOLOGIN_REQUEST_URI'] = $_SERVER['REQUEST_URI'] ;

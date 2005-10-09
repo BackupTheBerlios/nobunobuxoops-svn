@@ -103,7 +103,7 @@ switch($op) {
         if ( !$xoopsUser ) {
             $config_handler =& xoops_gethandler('config');
             $xoopsConfigUser =& $config_handler->getConfigsByCat(XOOPS_CONF_USER);
-            $xoopsOption['template_main'] = 'autologin_userform.html';
+            $xoopsOption['template_main'] = 'sysutil_userform.html';
             include XOOPS_ROOT_PATH.'/header.php';
             $xoopsTpl->assign('lang_login', _LOGIN);
             $xoopsTpl->assign('lang_username', _USERNAME);
