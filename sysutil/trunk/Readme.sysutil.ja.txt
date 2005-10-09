@@ -1,59 +1,59 @@
 XOOPS System Hack Utilities, AutoLogin & Multi Language Module.
 
-[奣梫]
-丂偙偺儌僕儏乕儖偼丄堦愗偺XOOPS僐傾僼傽僀儖偵懳偡傞廋惓柍偟偱丄
-丂GIJOE巵奐敪偺埲壓偺埲壓偺HACK偲摨摍婡擻傪採嫙偡傞儌僕儏乕儖偱偡丅
+[车妥]
+　このモジュ〖ルは、办磊のXOOPSコアファイルに滦する饯赖痰しで、
+　GIJOE会倡券の笆布のHACKと票霹怠墙を捏丁するモジュ〖ルです。
 
-丂丒Auto Login Hack
-丂丒EMLH(Easiest Multi Language Hack)
+　ˇAuto Login Hack
+　ˇEMLH(Easiest Multi Language Hack)
 
-丂儌僕儏乕儖壔偡傞偵偁偨偭偰丄婔偮偐偺婡擻偺屳姺惈偼柍偔側偭偰偄傑偡偑丄
-丂婎杮揑偵偼忋婰偺GIJOE巵奐敪偵傛傞俀偮偺Hack偲摨摍偺婡擻傪帩偭偰偄傑偡丅
-丂尦乆偺Hack偵斾傋傞偲丄僐傾傪廋惓偡傞庤娫偑晄梡側暘丄庒姳惈擻揑偵偼丄
-丂柍懯側張棟傪峴偭偰偄傑偡偑丄傎偲傫偳塭嬁偟側偄偲巚偄傑偡丅
+　モジュ〖ル步するにあたって、傣つかの怠墙の高垂拉は痰くなっていますが、
+　答塑弄には惧淡のGIJOE会倡券による２つのHackと票霹の怠墙を积っています。
+　傅」のHackに孺べると、コアを饯赖する缄粗が稍脱な尸、笺闯拉墙弄には、
+　痰绿な借妄を乖っていますが、ほとんど逼读しないと蛔います。
 
-丂傑偨丄Multi Language懳墳晹暘偵娭偟偰偼丄EMLH偵懳偟偰丄XOOPS偺尵岅娐嫬
-丂愗懼偺婡擻偑晅壛偝傟偰偄傑偡丅扐偟偙偺婡擻傪巊梡偡傞偲丄僽儘僢僋
-丂僉儍僢僔儏偵傕懳墳偱偒傞偲偄偆EMLH偺摿挜偺堦偮偑幐傢傟偰偟傑偆帠偵
-丂側傝傑偡丅
+　また、Multi Language滦炳婶尸に簇しては、EMLHに滦して、XOOPSの咐胳茨董
+　磊仑の怠墙が烧裁されています。芒しこの怠墙を蝗脱すると、ブロック
+　キャッシュにも滦炳できるというEMLHの泼魔の办つが己われてしまう祸に
+　なります。
 
-[摫擖曽朄]
-侾丏夝搥偟偨僼傽僀儖孮傪丄XOOPS偺儖乕僩偵僐僺乕偟偰壓偝偄丅
-丂丂庡側僨傿儗僋僩儕峔惉偼埲壓偺傛偆偵側偭偰偄傑偡丅
-丂丂
-丂丂XOOPS_ROOT_PATH
-丂丂|
-丂丂+--language
-丂丂|   |
-丂丂|   +--multi_lang
-丂丂|
-丂丂+--modules
-丂丂    |
-丂丂    +--sysutil
+[瞥掐数恕]
+１ˉ豺培したファイル凡を、XOOPSのル〖トにコピ〖して布さい。
+　　肩なディレクトリ菇喇は笆布のようになっています。
+　　
+　　XOOPS_ROOT_PATH
+　　|
+　　+--language
+　　|   |
+　　|   +--multi_lang
+　　|
+　　+--modules
+　　    |
+　　    +--sysutil
 
-俀丏sysutil儌僕儏乕儖傪丄僀儞僗僩乕儖偟偰壓偝偄丅
+２ˉsysutilモジュ〖ルを、インスト〖ルして布さい。
 
-俁丏娗棟強儊僯儏乕偺sysutil-堦斒愝掕傪奐偄偰丄
-丂丂奺愝掕崁栚傪愝掕偟偰壓偝偄丅
-丂丂偙偺帪丄Multi Language傪巊梡偟側偄応崌偱傕丄
-丂丂僨僼僅儖僩偺巊梡尵岅偼揔愗偵愝掕偟偰壓偝偄丅
-丂丂摫擖捈屻偼丄乽english乿偵愝掕偝傟偰偄傑偡偑丄
-丂丂擔杮岅娐嫬偺応崌偵偼乽japanese乿偵曄峏偟偰壓偝偄丅
+３ˉ瓷妄疥メニュ〖のsysutil-办忍肋年を倡いて、
+　　称肋年灌誊を肋年して布さい。
+　　この箕、Multi Languageを蝗脱しない眷圭でも、
+　　デフォルトの蝗脱咐胳は努磊に肋年して布さい。
+　　瞥掐木稿は、≈english∽に肋年されていますが、 
+　　泣塑胳茨董の眷圭には≈japanese∽に恃构して布さい。
 
-AutoLogin婡擻傪巊梡偝傟傞曽偺傒
-係丏昗弨偺乽儘僌僀儞乿僽儘僢僋傪旕昞帵偵曄峏偟丄懼傢傝偵
-丂丂sysutil儌僕儏乕儖偺乽儘僌僀儞乿傪昞帵偡傞傛偆偵曄峏偟偰壓偝偄丅
+AutoLogin怠墙を蝗脱される数のみ
+４ˉ筛洁の≈ログイン∽ブロックを润山绩に恃构し、仑わりに
+　　sysutilモジュ〖ルの≈ログイン∽を山绩するように恃构して布さい。
 
-Multi Language傪巊梡偝傟傞曽偺傒
-俆丏language/multi_lang/conf_ml.dist.php偲偄偆僼傽僀儖傪丄
-丂丂language/multi_lang/conf_ml.php偲偄偆柤慜偺僼傽僀儖偲偟偰僐僺乕偟丄
-丂丂偦偺僼傽僀儖偺拞恎傪廋惓偟偰壓偝偄丅
-丂丂昗弨偺僼傽僀儖偱偼丄擔杮岅丄塸岅偺愗懼傪峴偆帠偑壜擻偲側偭偰偄傑偡丅
-丂丂[mlimg]僞僌偵偰昞帵偝傟傞崙婙僀儊乕僕偼丄擔暷偺崙婙偺傒偑modules/sysutil/images
-丂丂僨傿儗僋僩儕壓偵偍偄偰偁傝傑偡丅
+Multi Languageを蝗脱される数のみ
+５ˉlanguage/multi_lang/conf_ml.dist.phpというファイルを、
+　　language/multi_lang/conf_ml.phpという叹涟のファイルとしてコピ〖し、
+　　そのファイルの面咳を饯赖して布さい。
+　　筛洁のファイルでは、泣塑胳、毖胳の磊仑を乖う祸が材墙となっています。
+　　[mlimg]タグにて山绩される柜代イメ〖ジは、泣势の柜代のみがmodules/sysutil/images
+　　ディレクトリ布においてあります。
 
-俇丏昁梫偵墳偠偰丄乽尵岅愗懼乿僽儘僢僋傪昞帵偡傞傛偆偵愝掕偟偰壓偝偄丅
+６ˉ涩妥に炳じて、≈咐胳磊仑∽ブロックを山绩するように肋年して布さい。
 
-偡傋偰偺曽
-俈丏倃俷俷俹俽偺乽僔僗僥儉娗棟乿-乽堦斒愝掕乿-乽堦斒愝掕乿夋柺偵偰丄
-丂丂巊梡尵岅傪乽multi_lang乿偵曄峏偟偰壓偝偄丅
+すべての数
+７ˉＸＯＯＰＳの≈システム瓷妄∽-≈办忍肋年∽-≈办忍肋年∽茶烫にて、
+　　蝗脱咐胳を≈multi_lang∽に恃构して布さい。
