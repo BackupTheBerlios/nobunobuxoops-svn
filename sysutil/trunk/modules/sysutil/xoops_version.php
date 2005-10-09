@@ -14,7 +14,7 @@ $modversion['image'] = 'images/blank_module.png';
 $modversion['dirname'] = $mydirname;
 $modversion['onInstall'] = 'include/on_install.php';
 
-$modversion['hasMain'] = 0;
+$modversion['hasMain'] = 1;
 
 // Templates
 $modversion['templates'][1]['file'] = 'sysutil_userform.html';

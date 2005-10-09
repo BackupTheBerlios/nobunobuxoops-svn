@@ -20,6 +20,11 @@ function xoops_module_install_sysutil(&$module) {
         unset($bperm);
     }
 	unset($blocks);
+	
+	$module_handler =& xoops_gethandler('module');
+	$module->setVar('weight', 0);
+	$module->unsetNew();
+	$module_handler->insert($module);
 	return true;
 }
 ?>
