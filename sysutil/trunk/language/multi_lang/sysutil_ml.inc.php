@@ -34,10 +34,9 @@ if (sysutil_get_xoops_option('sysutil', 'sysutil_change_lang_conf')) {
 		} else {
 			$xoopsConfig['language'] = sysutil_get_xoops_option('sysutil', 'sysutil_default_lang');
 		}
-		$sysutil_ml_langname = $xoopsConfig['language'];
 	}
 	if (empty($_COOKIE[SYSUTIL_ML_COOKIE_NAME]) || ($_COOKIE[SYSUTIL_ML_COOKIE_NAME] != $xoopsConfig['language'])) {
-		setcookie(SYSUTIL_ML_COOKIE_NAME, $sysutil_ml_langname, time() + SYSUTIL_ML_COOKIELIFETIME, $xoops_cookie_path, '' , 0);
+		setcookie(SYSUTIL_ML_COOKIE_NAME, $xoopsConfig['language'] , time() + SYSUTIL_ML_COOKIELIFETIME, $xoops_cookie_path, '' , 0);
 	}
 } else {
 	$xoopsConfig['language'] = sysutil_get_xoops_option('sysutil', 'sysutil_default_lang');
