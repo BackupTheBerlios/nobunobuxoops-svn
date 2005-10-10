@@ -3,7 +3,7 @@ if(!defined('XOOPS_ROOT_PATH')) exit ;
 $mydirname = basename(dirname( __FILE__ )) ;
 
 $modversion['name'] = $mydirname;
-$modversion['version'] = '0.1';
+$modversion['version'] = '0.2';
 $modversion['description'] = 'XOOPS System Hack Utilities, AutoLogin & Multi Language Module';
 $modversion['credits'] = 'NobuNobu';
 $modversion['author'] = 'http://www.kowa.org/';
