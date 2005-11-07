@@ -1,5 +1,5 @@
 <?php
-// $Id: xoopsmailerlocal.php,v 1.2 2005/03/18 12:51:55 onokazu Exp $
+// $Id: xoopsmailerlocal.php,v 1.2 2005/09/04 20:46:09 onokazu Exp $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -133,10 +133,11 @@ class XoopsMultiMailerLocal extends XoopsMultiMailer {
                 $encoded ='';
                 $cut_length = floor((76-strlen('Subject: =?'.$encode_charset.'?B?'.'?='))/4)*3;
                 while($i < strlen($str)) {
-                	$partstr = mb_strcut ( $str, $i, $cut_length, $encode_charset);
-                	if ($i) $encoded .= "\r\n ";
-                	$encoded .= '=?' . $encode_charset . '?B?' . base64_encode($partstr) . '?=';
-                	$i += strlen($partstr);
+                    $partstr = mb_strcut ( $str, $i, $cut_length, $encode_charset);
+                    if (!strlen($partstr)) break;
+                    if ($i) $encoded .= "\r\n ";
+                    $encoded .= '=?' . $encode_charset . '?B?' . base64_encode($partstr) . '?=';
+                    $i += strlen($partstr);
                 }
             } else {
                 $encoded = $str;
