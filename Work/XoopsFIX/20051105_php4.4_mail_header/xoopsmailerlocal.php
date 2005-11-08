@@ -132,14 +132,15 @@ class XoopsMultiMailerLocal extends XoopsMultiMailer {
                 if ($str_encoding == 'ASCII') { // Return original if string from only ASCII chars.
                     return $str;
                 }
-            	$str = mb_convert_encoding($str, $encode_charset, $str_encoding);
-            	
+                $str = mb_convert_encoding($str, $encode_charset, $str_encoding);
+                //Following Logic are made for recovering PHP4.4.x mb_encode_mimeheader() bug.
+                //ToDo: If mb_encode_mimeheader() bug is fixed. Replace this to simple logic.
                 $cut_start = 0;
                 $encoded ='';
                 $cut_length = floor((76-strlen('Subject: =?'.$encode_charset.'?B?'.'?='))/4)*3;
                 while($cut_start < strlen($str)) {
                     $partstr = mb_strcut ( $str, $cut_start, $cut_length, $encode_charset);
-			        $partstr_length = strlen($partstr);
+                    $partstr_length = strlen($partstr);
                     if (!$partstr_length) break;
                     if ($encode_charset == 'ISO-2022-JP') { //Adjusting for SO & SI char insertion.
                         if ((substr($partstr, 0, 3)===chr(27).'$B') 
