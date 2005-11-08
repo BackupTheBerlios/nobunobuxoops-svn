@@ -126,18 +126,34 @@ class XoopsMultiMailerLocal extends XoopsMultiMailer {
 
     function encode_header ($str, $position = 'text', $force=false) {
         $encode_charset = 'ISO-2022-JP';
-        if (function_exists('mb_convert_encoding')) { //Use mb_string extension if exists.
+        if (function_exists('mb_convert_encoding')) { //Using mb_string extension if exists.
             if ($this->needs_encode || $force) {
-                $str = mb_convert_encoding($str, $encode_charset, mb_detect_encoding($str));
-                $i = 0;
+            	$str_encoding = mb_detect_encoding($str);
+                if ($str_encoding == 'ASCII') { // Return original if string from only ASCII chars.
+                    return $str;
+                }
+            	$str = mb_convert_encoding($str, $encode_charset, $str_encoding);
+            	
+                $cut_start = 0;
                 $encoded ='';
                 $cut_length = floor((76-strlen('Subject: =?'.$encode_charset.'?B?'.'?='))/4)*3;
-                while($i < strlen($str)) {
-                    $partstr = mb_strcut ( $str, $i, $cut_length, $encode_charset);
-                    if (!strlen($partstr)) break;
-                    if ($i) $encoded .= "\r\n ";
+                while($cut_start < strlen($str)) {
+                    $partstr = mb_strcut ( $str, $cut_start, $cut_length, $encode_charset);
+			        $partstr_length = strlen($partstr);
+                    if (!$partstr_length) break;
+                    if ($encode_charset == 'ISO-2022-JP') { //Adjusting for SO & SI char insertion.
+                        if ((substr($partstr, 0, 3)===chr(27).'$B') 
+                          && (substr($str, $cut_start, 3) !== chr(27).'$B')) {
+                            $partstr_length -= 3;
+                        }
+                        if ((substr($partstr,-3)===chr(27).'(B') 
+                          && (substr($str, $cut_start+$partstr_length-3, 3) !== chr(27).'(B')) {
+                            $partstr_length -= 3;
+                        }
+                    }
+                    if ($cut_start) $encoded .= "\r\n ";
                     $encoded .= '=?' . $encode_charset . '?B?' . base64_encode($partstr) . '?=';
-                    $i += strlen($partstr);
+                    $cut_start += $partstr_length;
                 }
             } else {
                 $encoded = $str;
