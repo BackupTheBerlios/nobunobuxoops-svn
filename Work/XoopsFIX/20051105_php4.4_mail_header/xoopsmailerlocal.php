@@ -35,6 +35,7 @@ class XoopsMailerLocal extends XoopsMailer {
         $this->reset();
         $this->charSet = 'iso-2022-jp';
         $this->encoding = '7bit';
+		$this->multimailer->CharSet = $this->charSet;
     }
 
     function encodeFromName($text){
@@ -115,6 +116,7 @@ class XoopsMultiMailerLocal extends XoopsMultiMailer {
         }
     }
 
+    //TODO: This Method Name will be chaneged in New "PHP Mailer" Release.
     function addr_format($addr) {
         if(empty($addr[1])) {
             $formatted = $addr[0];
@@ -124,17 +126,19 @@ class XoopsMultiMailerLocal extends XoopsMultiMailer {
         return $formatted;
     }
 
+    //TODO: This Method Name will be chaneged in New "PHP Mailer" Release.
     function encode_header ($str, $position = 'text', $force=false) {
-        $encode_charset = 'ISO-2022-JP';
+        $encode_charset = 'ISO-2022-JP'; //ToDo: Initialize with $this->Charset, but it won't work well now.
         if (function_exists('mb_convert_encoding')) { //Using mb_string extension if exists.
             if ($this->needs_encode || $force) {
-            	$str_encoding = mb_detect_encoding($str);
+            	$str_encoding = mb_detect_encoding($str, 'ASCII,'.$encode_charset );
                 if ($str_encoding == 'ASCII') { // Return original if string from only ASCII chars.
                     return $str;
+                } else if ($str_encoding != $encode_charset) { // Maybe this case may not occur.
+                    $str = mb_convert_encoding($str, $encode_charset, $str_encoding);
                 }
-                $str = mb_convert_encoding($str, $encode_charset, $str_encoding);
                 //Following Logic are made for recovering PHP4.4.x mb_encode_mimeheader() bug.
-                //ToDo: If mb_encode_mimeheader() bug is fixed. Replace this to simple logic.
+                //TODO: If mb_encode_mimeheader() bug is fixed. Replace this to simple logic.
                 $cut_start = 0;
                 $encoded ='';
                 $cut_length = floor((76-strlen('Subject: =?'.$encode_charset.'?B?'.'?='))/4)*3;
@@ -142,7 +146,8 @@ class XoopsMultiMailerLocal extends XoopsMultiMailer {
                     $partstr = mb_strcut ( $str, $cut_start, $cut_length, $encode_charset);
                     $partstr_length = strlen($partstr);
                     if (!$partstr_length) break;
-                    if ($encode_charset == 'ISO-2022-JP') { //Adjusting for SO & SI char insertion.
+                    if ($encode_charset == 'ISO-2022-JP') { 
+                        //Should Adjust next cutting place for SO & SI char insertion.
                         if ((substr($partstr, 0, 3)===chr(27).'$B') 
                           && (substr($str, $cut_start, 3) !== chr(27).'$B')) {
                             $partstr_length -= 3;
@@ -152,7 +157,7 @@ class XoopsMultiMailerLocal extends XoopsMultiMailer {
                             $partstr_length -= 3;
                         }
                     }
-                    if ($cut_start) $encoded .= "\r\n ";
+                    if ($cut_start) $encoded .= "\n\t";
                     $encoded .= '=?' . $encode_charset . '?B?' . base64_encode($partstr) . '?=';
                     $cut_start += $partstr_length;
                 }
