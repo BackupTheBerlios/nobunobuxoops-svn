@@ -157,7 +157,7 @@ class XoopsMultiMailerLocal extends XoopsMultiMailer {
                             $partstr_length -= 3;
                         }
                     }
-                    if ($cut_start) $encoded .= "\n\t";
+                    if ($cut_start) $encoded .= "\r\n\t";
                     $encoded .= '=?' . $encode_charset . '?B?' . base64_encode($partstr) . '?=';
                     $cut_start += $partstr_length;
                 }
